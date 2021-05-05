@@ -1,4 +1,5 @@
 <style lang="scss" global>
+@import './style/main.scss';
 </style>
 
 <script>
