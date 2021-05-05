@@ -1,6 +1,7 @@
 import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
+import json from '@rollup/plugin-json';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
@@ -24,7 +25,7 @@ function serve() {
                 {
                     stdio: ['ignore', 'inherit', 'inherit'],
                     shell: true,
-                }
+                },
             );
 
             process.on('SIGTERM', toExit);
@@ -53,6 +54,9 @@ export default {
                 dev: !production,
             },
         }),
+
+        json(),
+
         // we'll extract any component CSS out into
         // a separate file - better for performance
         css({ output: 'bundle.css' }),

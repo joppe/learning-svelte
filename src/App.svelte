@@ -5,22 +5,44 @@
 import router from 'page';
 import Home from './page/Home.svelte';
 import Login from './page/Login.svelte';
+import { isReady } from './firebase/firebase';
+import { isLoggedIn, logout } from './firebase/useAuth';
+import { user } from './store/user';
 
 let page;
+let loggedInUser;
 
-router('/', () => {
-    page = Home;
-});
-router('/login', () => {
-    page = Login;
+user.subscribe((v) => {
+    loggedInUser = v;
 });
 
-router.start();
+(async () => {
+    await isReady();
+
+    router('/', () => {
+        if (!isLoggedIn()) {
+            router.redirect('/login');
+        }
+        page = Home;
+    });
+    router('/login', () => {
+        page = Login;
+    });
+
+    router.start();
+})();
 </script>
 
 <main>
     <h1>test</h1>
     <a href="/">Home</a>
-    <a href="/login">Login</a>
-    <svelte:component this="{page}" />
+    {#if loggedInUser}
+        <button type="button" on:click="{logout}">Logout</button>
+    {:else}
+        <a href="/login">Login</a>
+    {/if}
+
+    {#if page}
+        <svelte:component this="{page}" />
+    {/if}
 </main>
