@@ -1,0 +1,5 @@
+.o-block {
+    margin-bottom: map-get($spacing, 'lg');
+    padding: map-get($spacing, 'md');
+    border: 1px solid $black;
+}
