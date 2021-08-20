@@ -1,1 +1,5 @@
-<h1>Home</h1>
+<script>
+import Dashboard from '../component/dashboard/Dashboard.svelte';
+</script>
+
+<Dashboard />

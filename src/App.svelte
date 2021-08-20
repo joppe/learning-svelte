@@ -4,6 +4,7 @@
 }
 
 @import './style/config/_spacing.scss';
+
 nav {
     ul {
         display: flex;
@@ -45,6 +46,7 @@ nav {
 <script>
 import router from 'page';
 import Home from './page/Home.svelte';
+import Period from './page/Period.svelte';
 import Login from './page/Login.svelte';
 import NotFound from './page/NotFound.svelte';
 import { isReady } from './firebase/firebase';
@@ -52,6 +54,7 @@ import { isLoggedIn, logout } from './firebase/useAuth';
 import { user } from './store/user';
 
 let page;
+let params;
 let loggedInUser;
 
 user.subscribe((v) => {
@@ -67,6 +70,19 @@ user.subscribe((v) => {
         }
         page = Home;
     });
+    router(
+        '/period/:date',
+        (ctx, next) => {
+            params = ctx.params;
+            next();
+        },
+        () => {
+            if (!isLoggedIn()) {
+                router.redirect('/login');
+            }
+            page = Period;
+        },
+    );
     router('/login', () => {
         page = Login;
     });
@@ -97,6 +113,6 @@ user.subscribe((v) => {
 
 <main>
     {#if page}
-        <svelte:component this="{page}" />
+        <svelte:component this="{page}" params="{params}" />
     {/if}
 </main>

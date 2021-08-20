@@ -21,7 +21,7 @@ table {
             background-color: $blue--maya;
         }
 
-        &:nth-of-type(odd):not(.active) {
+        &:nth-of-type(odd):not(.current) {
             background-color: $grey--dark-gray;
         }
 
@@ -34,6 +34,14 @@ table {
 </style>
 
 <script>
+import { createEventDispatcher } from 'svelte';
+
+const dispatch = createEventDispatcher();
+
+function handleClick(entry) {
+    dispatch('selected', entry);
+}
+
 export let fields;
 export let data;
 export let styler;
@@ -50,7 +58,7 @@ export let styler;
 
     <tbody>
         {#each data as entry}
-            <tr class="{styler(entry)}">
+            <tr class="{styler(entry)}" on:click="{() => handleClick(entry)}">
                 {#each fields as field}
                     <td>
                         {field.mapper
